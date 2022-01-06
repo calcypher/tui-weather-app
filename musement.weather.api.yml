@@ -1,0 +1,134 @@
+openapi: "3.0.0"
+info:
+  description: "API for Weather Forecast"
+  version: "1.0.0"
+  title: "Musement Weather Forecast API"
+  contact:
+    email: "pilade.franceschi@gmail.com"
+servers:
+  - url: "https://sandbox.musement.com/api/v1"
+paths:
+  /cities/{id}/weather:
+    post:
+      tags:
+      - "Weather Forecast"
+      summary: "Add one or more Weather Forecast Days for a City"
+      description: "API Path contains ID of the City. Request payload contains an array of Weather objects. Each object indicates a Weather Forecast for a specific day. This API set one or more Forecast days for a specific City. Forecast contains only textual informations, but it's possible to add all informations collected from Weatherapi"
+      operationId: "SetWeatherForecastByCityId"
+      requestBody:
+        description: "Array of Weather object"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Weather"
+      parameters:
+      - in: "path"
+        name: "id"
+        description: "City Identifier"
+        required: true
+        schema:
+          $ref: "#/components/parameters/cityId"
+      responses:
+        "200":
+          "description": "Forecast updated successfully"
+        "404":
+          "description": "no city found"
+        "400":
+          description: "Invalid input or problems trying to save data"
+      security:
+        - content_manager: []
+    get:
+      tags:
+      - "Weather Forecast"
+      summary: "Get Weather Forecast for a specific City and for a number of days starting from today."
+      description: "API Path contains ID of the City. Query parameters contains the number of forecast days to retrieve. 0 indicates only today, 1 indicates today and tomorrow and so on."
+      operationId: "GetWeatherForecastByCityId"
+      parameters:
+      - in: "path"
+        name: "id"
+        description: "City Identifier"
+        required: true
+        schema:
+          $ref: "#/components/parameters/cityId"
+      - in: "query"
+        name: "days"
+        description: "number of days of Weather Forecast, starting from today. 0 means today. default is 0"
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            "application/json":
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Weather"
+        "404":
+          "description": "no city found"
+        "405":
+          description: "Invalid input or problems trying to retrieve data"
+components:
+  schemas:
+    Weather:
+      type: "object"
+      properties:
+        day:
+          type: "string"
+          format: "date"
+          description: "Day of Forecast"
+        condition:
+          type: "string"
+          description: "Textual Weather Condition"
+          example: "Sunny"
+  parameters:
+    cityId:
+      name: "cityId"
+      in: "path"
+      description: City identifier
+      required: true
+      schema:
+        type: integer
+  securitySchemes:
+    customer:
+      "type": "oauth2"
+      "flows":
+        "password":
+          "tokenUrl": "https://api.musement.com/api/v3/login"
+          "refreshUrl": "https://api.musement.com/api/v3/refresh"
+          "scopes": 
+            "customer:read": "Read customer data: profile data, information about the orders"
+            "customer:update": "Update customer data: profile data"
+    content_manager:
+      type: "oauth2"
+      flows:
+        password:
+          tokenUrl: "https://api.musement.com/api/v3/login"
+          refreshUrl: "https://api.musement.com/api/v3/refresh"
+          scopes: 
+            "supplier:admin": "Create and update supplier's info"
+            "activity:admin": "Create and update activit's info"
+            "market:admin": "Market administration"
+    supplier:
+      type: "oauth2"
+      flows:
+        password:
+          tokenUrl: "https://api.musement.com/api/v3/login"
+          refreshUrl: "https://api.musement.com/api/v3/refresh"
+          scopes: 
+            "activity:admin": "Create and update activity's info"
+            "invoice:admin": "Handle invoices"
+            "order:admin": "Confirm, cancel an order"
+            "profile": "Handle profile"
+    merchant: 
+      type: "oauth2"
+      flows: 
+        clientCredentials:
+          tokenUrl: "https://api.musement.com/api/v3/login"
+          refreshUrl: "https://api.musement.com/api/v3/refresh"
+          scopes: 
+            "price": "Read ad hoc prices for an activity"
+            "no-payment": "Can use the 'no-payment' flow to pay an order"
