@@ -2,8 +2,8 @@
 
 namespace App\Service;
 
-use src\Dto\City;
-use src\Dto\Weather;
+use App\Dto\City;
+use App\Dto\Weather;
 use Symfony\Component\HttpClient\HttpClient;
 
 /**
