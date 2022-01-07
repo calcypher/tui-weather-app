@@ -1,12 +1,22 @@
 <?php
+
 namespace App\Service;
 
 use Symfony\Component\HttpClient\HttpClient;
 
+/**
+ * 
+ * Service to manage Weather Forecast for Cities
+ *
+ */
 class WeatherService
 {
-    
-    public function getCities()
+    /**
+     * get list of Cities from Musement API
+     * 
+     * @return array
+     */
+    public function getCities(): array
     {
         $client = HttpClient::create();
         $response = $client->request('GET', 'https://sandbox.musement.com/api/v3/cities', [
@@ -14,29 +24,23 @@ class WeatherService
                 'Accept' => 'application/json',
             ],
         ]);
-        
-        $content = $response->getContent();
-        // $content = '{"id":521583, "name":"symfony-docs", ...}'
-        $content = $response->toArray();
-        
-        return $content;
+
+        return $response->toArray();
     }
-    
-    public function getWeather($latitude, $longitude, $days)
+
+    /**
+     * get Weather Forecast for specific latitude and longitude
+     * 
+     * @param float $latitude
+     * @param float $longitude
+     * @param int $days
+     * @return array
+     */
+    public function getWeather(float $latitude, float $longitude, int $days): array
     {
         $client = HttpClient::create();
         $response = $client->request('GET', 'https://api.weatherapi.com/v1/forecast.json?key=da9e96b00aa94fdfa48142125220601&q='.$latitude.','.$longitude.'&days='.$days);
-        //echo 'https://api.weatherapi.com/v1/forecast.json?key=da9e96b00aa94fdfa48142125220601&q='.$latitude.','.$longitude.'&days='.$days;
-        
-        $statusCode = $response->getStatusCode();
-        // $statusCode = 200
-        $contentType = $response->getHeaders()['content-type'][0];
-        // $contentType = 'application/json'
-        $content = $response->getContent();
-        // $content = '{"id":521583, "name":"symfony-docs", ...}'
-        $content = $response->toArray();
-        
-        return $content;
+
+        return $response->toArray();
     }
 }
-
