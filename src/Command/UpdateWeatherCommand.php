@@ -8,17 +8,17 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * 
- * this Command permits to update Weather Forecast for all Musement Cities
- *
+ * this Command permits to update Weather Forecast for all Musement Cities.
  */
 class UpdateWeatherCommand extends Command
 {
-
     /**
-     * Configuration for Weather Command
-     * 
+     * Configuration for Weather Command.
+     *
+     * @return void
+     *
      * {@inheritDoc}
+     *
      * @see \Symfony\Component\Console\Command\Command::configure()
      */
     protected function configure()
@@ -29,12 +29,15 @@ class UpdateWeatherCommand extends Command
 
     /**
      * get all Musement Cities and update Weather Forecast for each Cities
+     * 
+     * @return int
+     * 
      * {@inheritDoc}
+     *
      * @see \Symfony\Component\Console\Command\Command::execute()
      */
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         $weatherService = new WeatherService();
         $cities = $weatherService->getCities();
 
