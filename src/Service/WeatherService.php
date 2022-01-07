@@ -3,6 +3,8 @@
 namespace App\Service;
 
 use Symfony\Component\HttpClient\HttpClient;
+use src\Dto\Weather;
+use src\Dto\City;
 
 /**
  * Service to manage Weather Forecast for Cities.
@@ -12,10 +14,11 @@ class WeatherService
     /**
      * get list of Cities from Musement API
      * 
-     * @return array<mixed>
+     * @return array<City>
      */
     public function getCities()
     {
+        $cities = array();
         $client = HttpClient::create();
         $response = $client->request('GET', 'https://sandbox.musement.com/api/v3/cities', [
             'headers' => [
@@ -23,7 +26,15 @@ class WeatherService
             ],
         ]);
 
-        return $response->toArray();
+        $cityItems = $response->toArray();
+        foreach ($cityItems as $cityItem) {
+            $city = new City();
+            $city->setName($cityItem['name']);
+            $city->setLatitude($cityItem['latitude']);
+            $city->setLongitude($cityItem['longitude']);
+            $cities[] = $city;
+        }
+        return $cities;
     }
 
     /**
@@ -32,13 +43,22 @@ class WeatherService
      * @param float $latitude
      * @param float $longitude
      * @param int $days
-     * @return array<mixed>
+     * @return array<Weather>
      */
     public function getWeather(float $latitude, float $longitude, int $days)
     {
         $client = HttpClient::create();
         $response = $client->request('GET', 'https://api.weatherapi.com/v1/forecast.json?key=da9e96b00aa94fdfa48142125220601&q='.$latitude.','.$longitude.'&days='.$days);
-
-        return $response->toArray();
+        
+        $weathers = array();
+        $days = $response->toArray();
+        foreach ($days['forecast']['forecastday'] as $day){
+            $weather = new Weather();
+            $weather->setDay($day['date']);
+            $weather->setCondition($day['day']['condition']['text']);
+            $weathers[] = $weather;
+        }
+        
+        return $weathers;
     }
 }

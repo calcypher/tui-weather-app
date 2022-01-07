@@ -42,9 +42,15 @@ class UpdateWeatherCommand extends Command
         $cities = $weatherService->getCities();
 
         foreach ($cities as $city) {
-            $weather = $weatherService->getWeather($city['latitude'], $city['longitude'], 2);
+            
             $now = new \DateTime();
-            $output->writeln($now->format('Y-m-d H:i:s').' Processed city '.$city['name'].' | '.$weather['forecast']['forecastday'][0]['day']['condition']['text'].' - '.$weather['forecast']['forecastday'][1]['day']['condition']['text']);
+            
+            $forecast = $now->format('Y-m-d H:i:s').' Processed city '.$city->getName().' | ';
+            
+            $weathers = $weatherService->getWeather($city->getLatitude(), $city->getLongitude(), 2);
+            $forecast .= $weathers[0]->getCondition().' - '.$weathers[1]->getCondition();
+            
+            $output->writeln($forecast);
         }
 
         return 1;
