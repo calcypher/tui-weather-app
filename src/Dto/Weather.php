@@ -1,19 +1,18 @@
 <?php
+
 namespace src\Dto;
 
 class Weather
 {
     /**
-     * 
      * @var string
      */
     private $day;
     /**
-     * 
      * @var string
      */
     private $condition;
-    
+
     /**
      * @return string
      */
@@ -32,6 +31,7 @@ class Weather
 
     /**
      * @param string $day
+     *
      * @return void
      */
     public function setDay($day)
@@ -41,14 +41,11 @@ class Weather
 
     /**
      * @param string $condition
+     *
      * @return void
      */
     public function setCondition($condition)
     {
         $this->condition = $condition;
     }
-
-    
-    
 }
-

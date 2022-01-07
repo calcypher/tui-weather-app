@@ -28,10 +28,10 @@ class UpdateWeatherCommand extends Command
     }
 
     /**
-     * get all Musement Cities and update Weather Forecast for each Cities
-     * 
+     * get all Musement Cities and update Weather Forecast for each Cities.
+     *
      * @return int
-     * 
+     *
      * {@inheritDoc}
      *
      * @see \Symfony\Component\Console\Command\Command::execute()
@@ -42,14 +42,13 @@ class UpdateWeatherCommand extends Command
         $cities = $weatherService->getCities();
 
         foreach ($cities as $city) {
-            
             $now = new \DateTime();
-            
+
             $forecast = $now->format('Y-m-d H:i:s').' Processed city '.$city->getName().' | ';
-            
+
             $weathers = $weatherService->getWeather($city->getLatitude(), $city->getLongitude(), 2);
             $forecast .= $weathers[0]->getCondition().' - '.$weathers[1]->getCondition();
-            
+
             $output->writeln($forecast);
         }
 

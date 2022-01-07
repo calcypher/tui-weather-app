@@ -1,23 +1,22 @@
 <?php
+
 namespace src\Dto;
 
 class City
 {
     /**
-     * 
      * @var string
      */
     private $name;
     /**
-     * 
      * @var float
      */
     private $latitude;
     /**
-     * 
      * @var float
      */
     private $longitude;
+
     /**
      * @return string
      */
@@ -44,7 +43,7 @@ class City
 
     /**
      * @param string $name
-     * 
+     *
      * @return void
      */
     public function setName($name)
@@ -54,7 +53,7 @@ class City
 
     /**
      * @param float $latitude
-     * 
+     *
      * @return void
      */
     public function setLatitude($latitude)
@@ -64,7 +63,7 @@ class City
 
     /**
      * @param float $longitude
-     * 
+     *
      * @return void
      */
     public function setLongitude($longitude)
@@ -72,4 +71,3 @@ class City
         $this->longitude = $longitude;
     }
 }
-
