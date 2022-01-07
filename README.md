@@ -1,7 +1,7 @@
 TUI Weather APP
 ==========================
 
-### Pilade Franceschi
+### author: Pilade Franceschi
 
 This APP permits to update Weather Forecast for Musement Cities, using Weatherapi.
 It's built on Symfony and implements "Backend tech homework" in this way:
